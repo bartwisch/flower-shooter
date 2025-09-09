@@ -30,6 +30,45 @@ $ adb reverse tcp:8081 tcp:8081
 
 Now access https://localhost:8081/ on your oculus browser, and you should see Project Flowerbed run.
 
+## Multiplayer Mode (Phase 1)
+
+Project Flowerbed now supports opt-in real-time multiplayer presence and planting synchronization. Multiple clients can join the same garden session to see each other’s head/hands and share planting events in real time.
+
+### Running Multiplayer Mode
+
+1. Start the multiplayer server:
+
+```
+yarn multiplayer:server
+```
+
+This starts a WebSocket relay server on port 8090.
+
+2. Start the client and server together in dev:
+
+```
+yarn multiplayer:dev
+```
+
+3. Enable multiplayer in the client:
+
+- Add `?mp=1` to the URL: `https://localhost:8081/?mp=1`
+- Or set localStorage: `localStorage.setItem('pfb:mp', '1')`
+- Optional room: `?room=myroom` to group sessions
+
+### Features
+
+- Presence: see other players’ head and hands at ~20Hz (simple colored primitives)
+- Planting: plants created by one player appear for others
+- Join/Leave: remote avatars spawn/despawn on connect/disconnect
+- Resilience: reconnects on transient network drops
+
+### Configuration
+
+- Server port: `MULTIPLAYER_PORT` env var (default 8090)
+- Custom server URL: set `window.__MULTIPLAYER_SERVER_URL__` at runtime if needed
+
+
 ## Code Structure
 
 The code for the Project Flowerbed experience can all be found in the `src` directory. This includes the CSS and HTML of the 2D page (found in `src/styles` and `src/subpages`), as well as all of the ingame logic (in `src/js`). Project Flowerbed uses an ECS architecture, and most of the data / components are available in `src/js/components`, and logic (as systems running per-frame) in `src/js/systems`.

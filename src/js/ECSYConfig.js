@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports */
 /**
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
@@ -179,6 +180,9 @@ import { SnapTurnSystem } from './systems/locomotion/SnapTurnSystem';
 import { StationaryFaunaComponent } from './components/StationaryFaunaComponent';
 import { StationaryFaunaSystem } from './systems/fauna/StationaryFaunaSystem';
 import { THREEGlobalComponent } from './components/THREEGlobalComponent';
+import { Networked } from './components/Networked';
+import { NetworkedPlayerComponent } from './components/multiplayer/NetworkedPlayerComponent';
+import { MultiplayerSystem } from './systems/multiplayer/MultiplayerSystem';
 import { TeleportationSystem } from './systems/locomotion/TeleportationSystem';
 import { UIPanelInteractionSystem } from './systems/ui/UIPanelInteractionSystem';
 import { UIPanelMediaSystem } from './systems/ui/UIPanelMediaSystem';
@@ -193,6 +197,8 @@ import { WateringSystem } from './systems/plants/WateringSystem';
 import { World } from 'ecsy';
 
 const ENABLE_HAND_POSER = false;
+
+/* eslint-enable sort-imports */
 
 export const setupECSY = () => {
 	let world = new World();
@@ -287,6 +293,8 @@ const registerComponents = (world) => {
 	world.registerComponent(SceneLightingComponent, false); // disable component pooling so we can setup on construction
 	world.registerComponent(LoadingScreenComponent);
 	world.registerComponent(UserIdentityComponent);
+	world.registerComponent(Networked);
+	world.registerComponent(NetworkedPlayerComponent);
 	world.registerComponent(WaterFaunaMovementComponent);
 	world.registerComponent(WaterFaunaGroupComponent);
 	world.registerComponent(SettingsPanelComponent);
@@ -417,6 +425,9 @@ export const registerSystemsAfterLoad = (world) => {
 	}
 	// add this near the end so it can properly collect removed instances
 	world.registerSystem(MeshInstancingSystem);
+
+	// Register multiplayer system late so inputs/transforms exist. It self-disables when not enabled.
+	world.registerSystem(MultiplayerSystem, { priority: 50 });
 };
 
 /**

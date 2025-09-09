@@ -13,7 +13,9 @@
 		"style-loader": "^2.0.0",
 		"webpack": "^5.76.3",
 		"webpack-cli": "^4.6.0",
-		"webpack-dev-server": "^4.15.0"
+    "webpack-dev-server": "^4.15.0",
+    "concurrently": "^9.2.1",
+    "ws": "^8.18.3"
 	},
 	"scripts": {
 		"build": "webpack",
@@ -26,7 +28,9 @@
 		"compress:audio": "node scripts/compress-audio",
 		"compress:images": "node scripts/compress-images",
 		"compress:video": "node scripts/compress-video",
-		"compress:ui": "node scripts/compress-ui"
+    "compress:ui": "node scripts/compress-ui",
+    "multiplayer:server": "node server/multiplayer/index.js",
+    "multiplayer:dev": "concurrently \"yarn serve\" \"yarn multiplayer:server\""
 	},
 	"dependencies": {
 		"@popperjs/core": "^2.11.0",
